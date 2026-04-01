@@ -1,0 +1,154 @@
+% Defaults if not set in roadmap.tex
+\providecommand{\RoadmapWeekStart}{27}
+\providecommand{\RoadmapWeekEnd}{39}
+\providecommand{\RoadmapMaxChartRows}{15}
+\providecommand{\RoadmapTimelineChapterTitle}{Project Timeline}
+\providecommand{\RoadmapTimelineContinuedTitle}{Project Timeline (continued)}
+\providecommand{\RoadmapCalendarTitle}{Calendar weeks}
+\providecommand{\RoadmapTodoChapterTitle}{TODO List}
+\providecommand{\RoadmapTodoWeekPrefix}{CW}
+
+% Central task data model (single source of truth)
+% Provide \RoadmapTaskData in roadmap.tex to define project-specific tasks.
+\newcommand{\RoadmapTask}[5]{}
+\providecommand{\RoadmapTaskData}{}
+
+% Central group data model
+% Format: \RoadmapGroup{key}{title}{startWeek}{endWeek}{color}{milestoneTitle}
+\newcommand{\RoadmapGroup}[6]{}
+\providecommand{\RoadmapGroupData}{}
+
+\newcount\RoadmapRowsOnPage
+\newcount\RoadmapGroupProgressSum
+\newcount\RoadmapGroupTaskCount
+\newcount\RoadmapGroupProgressValue
+
+\newif\ifRoadmapFirstChartPage
+\newif\ifRoadmapChartOpen
+
+\newcommand{\RoadmapWeekCount}{\number\numexpr\RoadmapWeekEnd-\RoadmapWeekStart+1\relax}
+
+\newcommand{\RoadmapTimelineFirstPageHeading}{%
+    \refstepcounter{chapter}%
+    \phantomsection
+    \addcontentsline{toc}{chapter}{\protect\numberline{\thechapter}\RoadmapTimelineChapterTitle}%
+    \chaptermark{\RoadmapTimelineChapterTitle}%
+    {\usekomafont{chapter}\chapterformat\RoadmapTimelineChapterTitle\par}\vspace{0.8em}
+}
+
+\newcommand{\RoadmapOpenChartPage}{%
+    \begin{landscape}
+    \ifRoadmapFirstChartPage
+        \RoadmapTimelineFirstPageHeading
+        \global\RoadmapFirstChartPagefalse
+    \else
+        \section*{\RoadmapTimelineContinuedTitle}
+    \fi
+    \begin{ganttchart}[
+        vgrid,
+        x unit=1.3cm,
+        y unit chart=0.6cm,
+        bar label font=\scriptsize,
+        group label font=\bfseries
+    ]{\RoadmapWeekStart}{\RoadmapWeekEnd}
+        \gantttitle{\RoadmapCalendarTitle}{\RoadmapWeekCount} \\
+        \gantttitlelist{\RoadmapWeekStart,...,\RoadmapWeekEnd}{1} \\
+    \RoadmapRowsOnPage=0\relax
+    \global\RoadmapChartOpentrue
+}
+
+\newcommand{\RoadmapCloseChartPage}{%
+    \end{ganttchart}
+    \end{landscape}
+    \clearpage
+    \global\RoadmapChartOpenfalse
+}
+
+\newcommand{\RoadmapEnsureSpaceForRows}[1]{%
+    \ifRoadmapChartOpen\else
+        \RoadmapOpenChartPage
+    \fi
+    \ifnum\numexpr\RoadmapRowsOnPage+#1\relax>\RoadmapMaxChartRows\relax
+        \RoadmapCloseChartPage
+        \RoadmapOpenChartPage
+    \fi
+}
+
+\newcommand{\RoadmapComputeGroupProgress}[1]{%
+    \RoadmapGroupProgressSum=0\relax
+    \RoadmapGroupTaskCount=0\relax
+    \renewcommand{\RoadmapTask}[5]{%
+        \ifstrequal{##1}{#1}{%
+            \advance\RoadmapGroupProgressSum by ##5\relax
+            \advance\RoadmapGroupTaskCount by 1\relax
+        }{}%
+    }%
+    \RoadmapTaskData%
+    \ifnum\RoadmapGroupTaskCount>0\relax
+        % Rounded average progress for the group.
+        \RoadmapGroupProgressValue=\numexpr(\RoadmapGroupProgressSum + \RoadmapGroupTaskCount/2) / \RoadmapGroupTaskCount\relax
+    \else
+        \RoadmapGroupProgressValue=0\relax
+    \fi
+}
+
+% key/title/start/end/color/milestone
+\newcommand{\RoadmapRenderGroup}[6]{%
+    \RoadmapComputeGroupProgress{#1}%
+    \RoadmapEnsureSpaceForRows{1}%
+    \ganttgroup[progress=\the\RoadmapGroupProgressValue, group/.append style={fill=#5!30}]{#2}{#3}{#4} \\
+    \advance\RoadmapRowsOnPage by 1\relax
+    \RenderTaskBarsForGroup{#1}{#5}
+    \RoadmapEnsureSpaceForRows{1}%
+    \ganttmilestone[milestone/.append style={fill=#5}]{#6}{#4} \\
+    \advance\RoadmapRowsOnPage by 1\relax
+}
+
+\newcommand{\RoadmapRenderAllGroupsInTimeline}{%
+    \RoadmapFirstChartPagetrue
+    \RoadmapChartOpenfalse%
+    \renewcommand{\RoadmapGroup}[6]{%
+        \RoadmapRenderGroup{##1}{##2}{##3}{##4}{##5}{##6}
+    }%
+    \RoadmapGroupData%
+    \ifRoadmapChartOpen
+        \RoadmapCloseChartPage
+    \fi
+}
+
+% Render all task bars for a given group key
+\newcommand{\RenderTaskBarsForGroup}[2]{%
+    \renewcommand{\RoadmapTask}[5]{%
+        \ifstrequal{##1}{#1}{%
+            \RoadmapEnsureSpaceForRows{1}%
+            \ganttbar[progress=##5, bar/.append style={fill=#2!60}]{##2}{##3}{##4} \\
+            \advance\RoadmapRowsOnPage by 1\relax
+        }{}%
+    }%
+    \RoadmapTaskData%
+}
+
+% Render all TODO items for a given group key
+\newcommand{\RenderTodoItemsForGroup}[1]{%
+    \renewcommand{\RoadmapTask}[5]{%
+        \ifstrequal{##1}{#1}{%
+            \item ##2\space (\RoadmapTodoWeekPrefix\space ##3--##4)
+        }{}%
+    }%
+    \RoadmapTaskData%
+}
+
+\newcommand{\RoadmapRenderTodoSection}[2]{%
+    \section{#2}
+    \begin{enumerate}
+        \RenderTodoItemsForGroup{#1}
+    \end{enumerate}
+}
+
+\newcommand{\RoadmapRenderAllTodoSections}{%
+    \chapter{\RoadmapTodoChapterTitle}
+    \renewcommand{\RoadmapGroup}[6]{%
+        \RoadmapRenderTodoSection{##1}{##2}
+    }%
+    \RoadmapGroupData%
+}

@@ -1,0 +1,30 @@
+\usepackage[left=3cm, right=2.5cm, top=2.5cm, bottom=2.5cm, includehead]{geometry}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{enumitem}
+\usepackage{xcolor}
+\usepackage{pgfgantt}
+\usepackage{pdflscape}
+\usepackage{pgffor}
+\usepackage{etoolbox}
+\usepackage{hyperref}
+\usepackage{scrlayer-scrpage}
+
+\hypersetup{
+    colorlinks=true,
+    urlcolor=blue,
+    linkcolor=black,
+    pdftitle=\Topic,
+    pdfsubject=\SubTopic,
+    pdfauthor=\Author
+}
+
+\setlist{noitemsep}
+
+\clearpairofpagestyles
+\ihead{\leftmark}
+\ohead{\pagemark}
+\setkomafont{pageheadfoot}{\normalfont}
