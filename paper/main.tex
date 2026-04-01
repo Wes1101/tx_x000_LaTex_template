@@ -1,0 +1,128 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                         %%
+%%                               LaTeX Vorlage                             %%
+%%                                                                         %%
+%% Ersteller:       Florian Christoph Veit                                 %%
+%% Letzte Änderung: 23. September 2021                                     %%
+%%                                                                         %%
+%% ACHTUNG: Bei zu großen Zahlen in den Verzeichnissen muss das manuell    %%
+%%          Angepasst werden (Zeile: 33)                                   %%
+%%                                                                         %%
+%% Literaturverzeichnis und Index kann in Zeile 123 / 124                  %%
+%% auskommentiert werden                                                   %%
+%%                                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[paper=a4, fontsize=12pt, listof=totoc, bibliography=totoc, index=totoc, listof=left]{scrreprt}   % Schriftgröße, Layout, Papierformat, Art des Dokumentes
+\addtokomafont{disposition}{\rmfamily}                                                                          % Überschriften mit serifen
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Book settings %%%%%%%%%%%%%%%%%%%%%%%%
+\RedeclareSectionCommand[beforeskip = 0pt, afterskip = 0.5cm]{chapter}
+\setcounter{secnumdepth}{3} % <----------------------------------------------------- Manual ajustment
+\setcounter{tocdepth}{3} % <----------------------------------------------------- Manual ajustment
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                         %%
+%%           Weitere Pakete in die Datei PACKAGEs.tex eintragen            %%
+%%                                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{packages.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%% More space for numbering in directories %%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\@pnumwidth}{32pt} % <----------------------------------------------------- Manual ajustment
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                         %%
+%%       Bitte Projektdaten in die Datei Project_Data.tex eintragen        %%
+%%                                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{00_Project_Data.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                         %%
+%%      In der Datei New_Commands.tex sind eigene Kommandos definiert      %%
+%%                                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{01_New_Commands.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                         %%
+%% \/   \/                         Optionen                        \/   \/ %%
+%%                                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%% Index, Abkürzungsverzeichnis und Glossar erstellen %%%%%%%%%%%%
+\makeindex
+\makenomenclature
+\makeglossaries
+
+% Festlegung der Art der Zitierung (Havardmethode: Abkuerzung Autor + Jahr) %
+\bibliographystyle{plainnat}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PDF-Optionen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\hypersetup{
+    bookmarksopen=false,
+    bookmarksnumbered=true,
+    bookmarksopenlevel=0,
+    pdftitle=\Topic,
+    pdfsubject=\SubTopic,
+    pdfauthor=\Author,
+    pdfborder={0 0 0},
+    pdfstartview=Fit,
+    pdfpagelayout=SinglePage,
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%% Layout und Beschriftungen %%%%%%%%%%%%%%%%%%%%%%%%%
+\onehalfspacing                % Zeilenabstand: 1.5 (Standard: 1.2)
+
+% \/ Engere itemize und enumerates \/
+\setlist{noitemsep}            % Zeilenabstand für items auf 1 setzen
+
+\addto\captionsngerman{        % Tabllen- und Abbildungsunterschriften ändern
+    \renewcommand{\figurename}{Abb.}
+    \renewcommand{\tablename}{Tab.}
+}
+\numberwithin{table}{chapter}                               % Tabellennummerierung je Sektion zurücksetzen
+\numberwithin{figure}{chapter}                              % Abbildungsnummerierung je Sektion zurücksetzen
+\renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}   % Tabellennummerierung mit Section
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}} % Abbildungsnummerierung mit Section
+\renewcommand{\thefootnote}{\arabic{footnote}}              % Sektionsbezeichnung von Fußnoten entfernen
+
+\renewcommand{\multfootsep}{, }                             % Mehrere Fußnoten durch ", " trennen
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                         %%
+%%                 Listingstyle in dieser Datei bearbeiten                 %%
+%%                                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{02_Listingstyle.tex}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                         %%
+%% \/ \/ \/ \/   Dateien einbinden in den jeweiligen Datein:   \/ \/ \/ \/ %%
+%%                 03_Pages | 04_Kapitel | 05_Anhang                       %%
+%%                                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+    \pagenumbering{Roman}
+    \input{03_pages.tex}
+
+    %%%%%%%%%%%%%%%%%%%%%%%% \/ \/ Kapitel einfügen \/ \/ %%%%%%%%%%%%%%%%%%%%%%%%
+    \pagenumbering{arabic}
+    \input{04_chapters.tex}
+
+    % Abschluss
+    \abk{cf.}{confer} % Vgl. wird beim indirektes Zitieren benötigt
+    \abk{ifm}{Ingenieurgemeinschaft für Messtechnik}
+    \include{pages/10_bibliography}
+    \include{pages/11_Index}
+
+    %%%%%%%%%%%%%%%%%%%%%%%% \/ \/ Anhang einfügen \/ \/ %%%%%%%%%%%%%%%%%%%%%%%%
+    \renewcommand{\thetable}{\Alph{section}.\arabic{table}}              % Tabellennummerierung mit Section
+    \renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}            % Abbildungsnummerierung mit Section
+    \renewcommand{\thelstlisting}{\Alph{section}.\arabic{lstlisting}}    % Listingsnummerierung mit Section
+    \pagenumbering{Roman}\setcounter{page}{1}
+    \appendix
+    \input{05_appendix.tex}
+\end{document}

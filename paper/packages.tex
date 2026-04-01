@@ -1,0 +1,71 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%                                                                         %%
+%%            Auf ctan.org können die meisten Dokumentationen              %%
+%%                    zu den Paketen gelesen werden                        %%
+%%                                                                         %%
+%% \/   \/                 Einbinden von Paketen                   \/   \/ %%
+%%                                                                         %%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\usepackage[left=3cm, right=2.5cm, top=2.5cm, bottom=2.5cm, includehead]{geometry}   % Einstellungen der Seitenränder
+\usepackage[english]{babel}                                                          % englische Silbentrennung
+\usepackage[utf8]{inputenc}                                                          % Umlaute
+\usepackage[T1]{fontenc}                                                             % Umlaute auch richtig ausgeben
+\usepackage{color}                                                                   % Farben
+\usepackage{xcolor}                                                                  % Farben
+\usepackage{makeidx}                                                                 % Index
+\usepackage[intoc]{nomencl}                                                          % Abkürzungsverzeichnis
+\usepackage[numbers]{natbib}                                                         % Zitate (Erweiterung für Literaturverzeichnis)
+\usepackage{amsmath}                                                                 % Zurücksetzen der Tabellen- und Abbildungsnummerierung je Sektion
+\usepackage{amssymb}                                                                 % Mehr Zeichen
+\usepackage[labelfont=bf, aboveskip=1mm]{caption}                                    % Bild- und Tabellenunterschrift (fett)
+\usepackage{setspace}                                                                % Zeilenabstand (vor footmisc laden!)
+\usepackage[bottom, multiple, hang, marginal]{footmisc}                              % Fußnoten [Ausrichtung unten, Trennung durch Seperator bei mehreren Fußnoten]
+\usepackage{graphicx}                                                                % Grafiken
+\usepackage{tabularx}                                                                % erweiterte Tabellen
+\usepackage{longtable}                                                               % mehrseitige Tabellen
+\usepackage{booktabs}                                                                % Für lines in tabellen
+\usepackage{multirow}                                                                % mehrere Spalten
+\usepackage{here}                                                                    % Provides the H option for floats that the environment is not really a float
+\usepackage{enumitem}                                                                % Befehl setlist (Zeilenabstand für itemize Umgebung auf 1 setzen)
+\usepackage{listings}                                                                % Quelltexte
+\usepackage{scrhack}                                                                 % The KOMA-Script bundle provides replacements for the article, report, and book classes with emphasis on typography and versatility.
+\usepackage{zref}                                                                    % Verweise (Anhangsverweise)
+\usepackage[toc, style=altlist, translate=false, nonumberlist]{glossaries}           % Glossar (nach hyperref, inputenc, babel und ngerman) ohne Seitenzahl
+\usepackage{glossaries-babel}                                                        % Glossar: Übersetzung im TOC
+\usepackage{pdfpages}                                                                % um PDFs einzubinden
+\usepackage[gen]{eurosym}                                                            % für das Eurozeichen. € = \euro{}
+\usepackage[hyperfootnotes=false, breaklinks=true]{hyperref}                         % pfd-Output [Fußnoten nicht verlinken]
+\usepackage{bookmark}                                                                % implements a new bookmark (outline) organization for package hyperref
+\usepackage{ulem}                                                                    % mehr optionen zum unterstreichen
+\usepackage{contour}                                                                 % colored contour around a given tex
+\usepackage{xfrac}                                                                   % andere art von bruch darzustellen
+\usepackage{verbatimbox}                                                             % to place its contents into a globally available box, or into a box specified by the user
+\renewcommand{\autodot}{}                                                            % Remove all end-of-counter dots
+
+%%%%%%%%%%%%%%%%%%%%%%%% Define header without package fancyhdr %%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{lmodern}
+\usepackage[automark,headsepline=.4pt,plainheadsepline]{scrlayer-scrpage}         % Erstellung von selbst definierten Kopfzeilen
+\clearpairofpagestyles%\clearscrheadfoot veraltet
+\renewcommand*{\chaptermarkformat}{%
+    \chaptername~\thechapter\autodot\enskip}
+\ohead*{\pagemark}
+\ihead{\headmark}
+\setkomafont{pageheadfoot}{\normalfont}
+\ihead{\leftmark}
+\ohead{\pagemark}
+
+\renewcommand*\pagemark{{\usekomafont{pagenumber}\nobreakspace\thepage}}
+\addtokomafont{pageheadfoot}{\upshape}
+
+\setlength{\columnsep}{25pt}
+\setlength{\columnseprule}{0.4pt}
+
+\renewcommand{\ULdepth}{1.8pt}
+\contourlength{0.8pt}
+
+%%%%%%%%%%%%%%%%%%%%%%%% Breaks url in literature %%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{url}
+\def\UrlBreaks{\do\/\do-}
+
+\makeatletter

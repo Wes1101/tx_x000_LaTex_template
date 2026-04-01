@@ -1,0 +1,9 @@
+% Listingnummering je Chapter zurücksetzen
+\numberwithin{lstlisting}{chapter}
+% Listingnummerierung mit chapter
+\renewcommand{\thelstlisting}{\arabic{chapter}.\arabic{lstlisting}}
+
+\lstlistoflistings
+\newpage
+
+\renewcommand{\lstlistingname}{Listing}
