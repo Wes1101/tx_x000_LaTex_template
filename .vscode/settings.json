@@ -1,0 +1,46 @@
+{
+  "latex-workshop.latex.tools": [
+    {
+      "name": "Build script: main",
+      "command": "bash",
+      "args": [
+        "%WORKSPACE_FOLDER%/helper_scripts/latexmk_build_clean",
+        "%WORKSPACE_FOLDER%/paper/main.tex"
+      ],
+      "env": {}
+    },
+    {
+      "name": "Build script: active root file",
+      "command": "bash",
+      "args": [
+        "%WORKSPACE_FOLDER%/helper_scripts/latexmk_build_clean",
+        "%DOC_EXT%"
+      ],
+      "env": {}
+    }
+  ],
+  "latex-workshop.latex.recipes": [
+    {
+      "name": "Build main.tex",
+      "tools": [
+        "Build script: main"
+      ]
+    },
+    {
+      "name": "Build active root file",
+      "tools": [
+        "Build script: active root file"
+      ]
+    }
+  ],
+  // Standard build should always compile paper/main.tex.
+  "latex-workshop.latex.recipe.default": "Build main.tex",
+  // Show full extension debug logs and keep logs across recipe steps.
+  "latex-workshop.message.log.show": true,
+  "latex-workshop.latex.build.clearLog.everyRecipeStep.enabled": false,
+  "latex-workshop.latex.build.rootfileInStatus": true,
+  "latex-workshop.latex.build.forceRecipeUsage": true,
+  "latex-workshop.latex.autoClean.run": "onFailed",
+  "latex-workshop.message.warning.show": true,
+  "latex-workshop.message.error.show": true
+}

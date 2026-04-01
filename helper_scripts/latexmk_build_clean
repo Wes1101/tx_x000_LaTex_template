@@ -1,22 +1,19 @@
 #!/bin/bash
 
+set -u
+
 error() {
   message="${1}"
   echo -e "\e[31m${message}\e[0m"
   exit 1
 }
 
-# Farben definieren
-RED='\033[0;31m'
-YELLOW='\033[1;93m'
-NC='\033[0m' # Reset
-
 # cleaning function for files produced during the latex compilation
 clean(){
   latexmk -c "$TEXFILE" > /dev/null
-  find $DIRNAME -type f -name '*.aux' -delete
-  find ${DIRNAME} -type f -name "${BASENAME}.*" -not -name '*.tex' -and -not -name '*.pdf' -delete
-  find ${DIRNAME} -type f -name "pdflatex*.fls" -delete
+  find "$DIRNAME" -type f -name '*.aux' -delete
+  find "$DIRNAME" -type f -name "${BASENAME}.*" -not -name '*.tex' -and -not -name '*.pdf' -delete
+  find "$DIRNAME" -type f -name "pdflatex*.fls" -delete
 }
 
 if [ -z "$1" ]; then
@@ -29,18 +26,16 @@ TEXFILE="$1"
 BASENAME="$(basename "$TEXFILE" .tex)"
 DIRNAME="$(dirname "$TEXFILE")"
 
-latexmk -pdf -file-line-error -halt-on-error "$TEXFILE" -outdir="$DIRNAME" 2>&1 | grep -Ei " Warning| undefined| Error" | awk '!seen[$0]++' | while IFS= read -r line; do
-  # ersetze gezielt Wörter durch farbige Varianten
-  line="${line//[Ww]arning/${YELLOW}Warning${NC}}"
-  line="${line//[Uu]ndefined/${RED}undefined${NC}}"
-  line="${line//[Ee]rror/${RED}Error${NC}}"
-  echo -e "$line"
-done
+echo "[latexmk_build_clean] BUILD START: $TEXFILE"
 
+latexmk -pdf -file-line-error -halt-on-error "$TEXFILE" -outdir="$DIRNAME"
+LATEXMK_EXIT_CODE=$?
 
-if [ $? -ne 0 ]; then
+if [ $LATEXMK_EXIT_CODE -ne 0 ]; then
+  echo "[latexmk_build_clean] BUILD FAILED: $TEXFILE"
   clean
-  error "Error while compiling: $TEXFILE."
+  error "Error while compiling: $TEXFILE (exit code: $LATEXMK_EXIT_CODE)."
 fi
 
 clean
+echo "[latexmk_build_clean] BUILD SUCCESS: $TEXFILE"
