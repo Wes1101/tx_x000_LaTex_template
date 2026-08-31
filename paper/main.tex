@@ -58,19 +58,30 @@
 \makeglossaries
 
 % Festlegung der Art der Zitierung (Havardmethode: Abkuerzung Autor + Jahr) %
-\bibliographystyle{plainnat}
+\addbibresource{literature/literature.bib}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PDF-Optionen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{ObsidianPurple}{HTML}{ff6e00} % Typisches Obsidian-Akzentviolett (oder 5b32a3 für noch dunkler)
+\definecolor{DocBlue}{HTML}{0969da}        % Schlichtes, modernes Web-Blau (GitHub-Style)
+
 \hypersetup{
-    bookmarksopen=false,
-    bookmarksnumbered=true,
-    bookmarksopenlevel=0,
+% --- Metadaten ---
     pdftitle=\Topic,
     pdfsubject=\SubTopic,
     pdfauthor=\Author,
-    pdfborder={0 0 0},
-    pdfstartview=Fit,
-    pdfpagelayout=SinglePage,
+    pdfcreator=LaTeX with hyperref,
+% --- PDF-Ansicht & Lesezeichen ---
+    bookmarksopen=false,
+    bookmarksnumbered=true,
+    bookmarksopenlevel=1,          % Öffnet bis Section-Ebene
+    pdfstartview=FitH,             % FitH (Fit Horizontal) ist lesefreundlicher als Fit
+    pdfpagelayout=OneColumn,
+% --- Farbige Links aktivieren ---
+    colorlinks=true,               % Text einfärben statt Boxen
+    linkcolor=ObsidianPurple,             % Interne Links (Inhaltsverz., Abkürzungen, Abb.)
+    citecolor=ObsidianPurple,             % Zitate (\cite)
+    urlcolor=DocBlue,               % URLs und \href
+    linktoc=all                    % Im Inhaltsverzeichnis Seitenzahl und Text klickbar machen
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%% Layout und Beschriftungen %%%%%%%%%%%%%%%%%%%%%%%%%
