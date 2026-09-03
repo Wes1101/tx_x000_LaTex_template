@@ -128,13 +128,13 @@
     \abk{ifm}{Ingenieurgemeinschaft für Messtechnik}
     \include{pages/10_bibliography}
     \include{pages/11_Index}
-    \include{pages/12_AI_usage_note}
 
     %%%%%%%%%%%%%%%%%%%%%%%% \/ \/ Anhang einfügen \/ \/ %%%%%%%%%%%%%%%%%%%%%%%%
-    \renewcommand{\thetable}{\Alph{section}.\arabic{table}}              % Tabellennummerierung mit Section
+    \renewcommand{\thetable}{\Alph{chapter}.\arabic{table}}              % Tabellennummerierung mit Section
     \renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}            % Abbildungsnummerierung mit Section
     \renewcommand{\thelstlisting}{\Alph{section}.\arabic{lstlisting}}    % Listingsnummerierung mit Section
     \pagenumbering{Roman}\setcounter{page}{1}
     \appendix
     \input{05_appendix.tex}
+    \include{pages/12_AI_usage_note}
 \end{document}
