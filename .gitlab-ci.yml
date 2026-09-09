@@ -1,0 +1,9 @@
+image: registry.gitlab.com/islandoftex/images/texlive:latest
+
+build:
+  script:
+    - latexmk -pdf paper/main.tex -outdir="paper"
+  artifacts:
+    paths:
+      - paper/main.pdf
+

@@ -58,19 +58,31 @@
 \makeglossaries
 
 % Festlegung der Art der Zitierung (Havardmethode: Abkuerzung Autor + Jahr) %
-\bibliographystyle{plainnat}
+\addbibresource{literature/literature.bib}
+\appto{\bibsetup}{\sloppy}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PDF-Optionen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\definecolor{ifmOrange}{HTML}{ff6e00}
+\definecolor{DocBlue}{HTML}{0969da}     % Schlichtes, modernes Web-Blau (GitHub-Style)
+
 \hypersetup{
-    bookmarksopen=false,
-    bookmarksnumbered=true,
-    bookmarksopenlevel=0,
+% --- Metadaten ---
     pdftitle=\Topic,
     pdfsubject=\SubTopic,
     pdfauthor=\Author,
-    pdfborder={0 0 0},
-    pdfstartview=Fit,
-    pdfpagelayout=SinglePage,
+    pdfcreator=LaTeX with hyperref,
+% --- PDF-Ansicht & Lesezeichen ---
+    bookmarksopen=false,
+    bookmarksnumbered=true,
+    bookmarksopenlevel=1,          % Öffnet bis Section-Ebene
+    pdfstartview=FitH,             % FitH (Fit Horizontal) ist lesefreundlicher als Fit
+    pdfpagelayout=OneColumn,
+% --- Farbige Links aktivieren ---
+    colorlinks=true,               % Text einfärben statt Boxen
+    linkcolor=ifmOrange,             % Interne Links (Inhaltsverz., Abkürzungen, Abb.)
+    citecolor=ifmOrange,             % Zitate (\cite)
+    urlcolor=DocBlue,               % URLs und \href
+    linktoc=all                    % Im Inhaltsverzeichnis Seitenzahl und Text klickbar machen
 }
 
 %%%%%%%%%%%%%%%%%%%%%%%%% Layout und Beschriftungen %%%%%%%%%%%%%%%%%%%%%%%%%
@@ -79,7 +91,7 @@
 % \/ Engere itemize und enumerates \/
 \setlist{noitemsep}            % Zeilenabstand für items auf 1 setzen
 
-\addto\captionsngerman{        % Tabllen- und Abbildungsunterschriften ändern
+\addto\captionsngerman{        % Tabellen- und Abbildungsunterschriften ändern
     \renewcommand{\figurename}{Abb.}
     \renewcommand{\tablename}{Tab.}
 }
@@ -119,10 +131,11 @@
     \include{pages/11_Index}
 
     %%%%%%%%%%%%%%%%%%%%%%%% \/ \/ Anhang einfügen \/ \/ %%%%%%%%%%%%%%%%%%%%%%%%
-    \renewcommand{\thetable}{\Alph{section}.\arabic{table}}              % Tabellennummerierung mit Section
+    \renewcommand{\thetable}{\Alph{chapter}.\arabic{table}}              % Tabellennummerierung mit Section
     \renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}            % Abbildungsnummerierung mit Section
     \renewcommand{\thelstlisting}{\Alph{section}.\arabic{lstlisting}}    % Listingsnummerierung mit Section
     \pagenumbering{Roman}\setcounter{page}{1}
     \appendix
     \input{05_appendix.tex}
+    \include{pages/12_AI_usage_note}
 \end{document}
