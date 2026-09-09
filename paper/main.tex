@@ -62,8 +62,8 @@
 \appto{\bibsetup}{\sloppy}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PDF-Optionen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\definecolor{ObsidianPurple}{HTML}{ff6e00} % Typisches Obsidian-Akzentviolett (oder 5b32a3 für noch dunkler)
-\definecolor{DocBlue}{HTML}{0969da}        % Schlichtes, modernes Web-Blau (GitHub-Style)
+\definecolor{ifmOrange}{HTML}{ff6e00}
+\definecolor{DocBlue}{HTML}{0969da}     % Schlichtes, modernes Web-Blau (GitHub-Style)
 
 \hypersetup{
 % --- Metadaten ---
@@ -79,8 +79,8 @@
     pdfpagelayout=OneColumn,
 % --- Farbige Links aktivieren ---
     colorlinks=true,               % Text einfärben statt Boxen
-    linkcolor=ObsidianPurple,             % Interne Links (Inhaltsverz., Abkürzungen, Abb.)
-    citecolor=ObsidianPurple,             % Zitate (\cite)
+    linkcolor=ifmOrange,             % Interne Links (Inhaltsverz., Abkürzungen, Abb.)
+    citecolor=ifmOrange,             % Zitate (\cite)
     urlcolor=DocBlue,               % URLs und \href
     linktoc=all                    % Im Inhaltsverzeichnis Seitenzahl und Text klickbar machen
 }
@@ -91,7 +91,7 @@
 % \/ Engere itemize und enumerates \/
 \setlist{noitemsep}            % Zeilenabstand für items auf 1 setzen
 
-\addto\captionsngerman{        % Tabllen- und Abbildungsunterschriften ändern
+\addto\captionsngerman{        % Tabellen- und Abbildungsunterschriften ändern
     \renewcommand{\figurename}{Abb.}
     \renewcommand{\tablename}{Tab.}
 }
