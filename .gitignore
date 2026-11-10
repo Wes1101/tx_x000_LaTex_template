@@ -1,3 +1,8 @@
-/paper/main.pdf
-/roadmap/roadmap.pdf
-*/out/
+# LaTeX build output
+paper/build/
+
+# IDE files: keep only shared run configurations
+.idea/*
+!.idea/.gitignore
+!.idea/vcs.xml
+!.idea/runConfigurations/

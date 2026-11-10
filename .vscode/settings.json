@@ -1,46 +1,29 @@
 {
+  // Requires the "LaTeX Workshop" extension (see .vscode/extensions.json).
+  // All build options live in paper/.latexmkrc; this file only wires it up.
   "latex-workshop.latex.tools": [
     {
-      "name": "Build script: main",
-      "command": "bash",
+      "name": "latexmk",
+      "command": "latexmk",
       "args": [
-        "%WORKSPACE_FOLDER%/helper_scripts/latexmk_build_clean",
-        "%WORKSPACE_FOLDER%/paper/main.tex"
-      ],
-      "env": {}
-    },
-    {
-      "name": "Build script: active root file",
-      "command": "bash",
-      "args": [
-        "%WORKSPACE_FOLDER%/helper_scripts/latexmk_build_clean",
-        "%DOC_EXT%"
-      ],
-      "env": {}
+        "-outdir=%OUTDIR%",
+        "%DOC%"
+      ]
     }
   ],
   "latex-workshop.latex.recipes": [
     {
-      "name": "Build main.tex",
-      "tools": [
-        "Build script: main"
-      ]
-    },
-    {
-      "name": "Build active root file",
-      "tools": [
-        "Build script: active root file"
-      ]
+      "name": "latexmk",
+      "tools": ["latexmk"]
     }
   ],
-  // Standard build should always compile paper/main.tex.
-  "latex-workshop.latex.recipe.default": "Build main.tex",
-  // Show full extension debug logs and keep logs across recipe steps.
-  "latex-workshop.message.log.show": true,
-  "latex-workshop.latex.build.clearLog.everyRecipeStep.enabled": false,
-  "latex-workshop.latex.build.rootfileInStatus": true,
-  "latex-workshop.latex.build.forceRecipeUsage": true,
-  "latex-workshop.latex.autoClean.run": "onFailed",
+  "latex-workshop.latex.recipe.default": "latexmk",
+  // Output directory, relative to the directory of main.tex (matches $out_dir in .latexmkrc).
+  "latex-workshop.latex.outDir": "%DIR%/build",
+  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.autoClean.run": "never",
+  "latex-workshop.latex.rootFile.doNotPrompt": true,
+  "latex-workshop.view.pdf.viewer": "tab",
   "latex-workshop.message.warning.show": true,
   "latex-workshop.message.error.show": true
 }

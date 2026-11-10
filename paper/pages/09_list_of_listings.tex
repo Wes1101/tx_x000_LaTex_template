@@ -1,9 +1,8 @@
 \begingroup
     \hypersetup{linkcolor=black}
 
-    % Listingnummering je Chapter zurücksetzen
+    % Reset listing numbering per chapter and prefix it with the chapter number
     \numberwithin{lstlisting}{chapter}
-    % Listingnummerierung mit chapter
     \renewcommand{\thelstlisting}{\arabic{chapter}.\arabic{lstlisting}}
 
     \lstlistoflistings

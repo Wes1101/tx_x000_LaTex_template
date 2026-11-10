@@ -1,139 +1,100 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                         %%
-%%                               LaTeX Vorlage                             %%
-%%                                                                         %%
-%% Ersteller:       Florian Christoph Veit                                 %%
-%% Letzte Änderung: 23. September 2021                                     %%
-%%                                                                         %%
-%% ACHTUNG: Bei zu großen Zahlen in den Verzeichnissen muss das manuell    %%
-%%          Angepasst werden (Zeile: 33)                                   %%
-%%                                                                         %%
-%% Literaturverzeichnis und Index kann in Zeile 123 / 124                  %%
-%% auskommentiert werden                                                   %%
-%%                                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% ---------------------------------------------------------------------------
+%% LaTeX template for DHBW papers
+%%
+%% Original author: Florian Christoph Veit (last change: 23 September 2021)
+%% Maintained by:   David Willig
+%%
+%% Where to edit:
+%%   00_Project_Data.tex   title, author, company, ...
+%%   packages.tex          package imports
+%%   01_New_Commands.tex   custom commands
+%%   02_Listingstyle.tex   source code style
+%%   03_pages.tex          front matter (title page, abstract, lists, ...)
+%%   04_chapters.tex       chapters
+%%   05_appendix.tex       appendix
+%%
+%% If page numbers in the lists overflow, adjust \@pnumwidth below.
+%% Bibliography and index are included at the end of the document body.
+%% ---------------------------------------------------------------------------
 
-\documentclass[paper=a4, fontsize=12pt, listof=totoc, bibliography=totoc, index=totoc, listof=left]{scrreprt}   % Schriftgröße, Layout, Papierformat, Art des Dokumentes
-\addtokomafont{disposition}{\rmfamily}                                                                          % Überschriften mit serifen
+\documentclass[paper=a4, fontsize=12pt, listof=totoc, bibliography=totoc, index=totoc, listof=left, parskip=full]{scrreprt}
+\addtokomafont{disposition}{\rmfamily}  % serif headings
 
+% Chapter spacing and depth of numbering / table of contents
+\RedeclareSectionCommand[beforeskip=0pt, afterskip=0.5cm]{chapter}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{3}
 
-%%%%%%%%%%%%%%%%%%%%%%%% Book settings %%%%%%%%%%%%%%%%%%%%%%%%
-\RedeclareSectionCommand[beforeskip = 0pt, afterskip = 0.5cm]{chapter}
-\setcounter{secnumdepth}{3} % <----------------------------------------------------- Manual ajustment
-\setcounter{tocdepth}{3} % <----------------------------------------------------- Manual ajustment
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                         %%
-%%           Weitere Pakete in die Datei PACKAGEs.tex eintragen            %%
-%%                                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{packages.tex}
 
-%%%%%%%%%%%%%%%%%%%%%%%% More space for numbering in directories %%%%%%%%%%%%%%%%%%%%%%%%
-\renewcommand{\@pnumwidth}{32pt} % <----------------------------------------------------- Manual ajustment
+% Wider page-number column in the lists (needed for large numbers)
+\makeatletter
+\renewcommand{\@pnumwidth}{32pt}
+\makeatother
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                         %%
-%%       Bitte Projektdaten in die Datei Project_Data.tex eintragen        %%
-%%                                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{00_Project_Data.tex}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                         %%
-%%      In der Datei New_Commands.tex sind eigene Kommandos definiert      %%
-%%                                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{01_New_Commands.tex}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                         %%
-%% \/   \/                         Optionen                        \/   \/ %%
-%%                                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%%%%%%%%%%%%% Index, Abkürzungsverzeichnis und Glossar erstellen %%%%%%%%%%%%
+% Generate index, list of abbreviations and glossary
 \makeindex
 \makenomenclature
 \makeglossaries
 
-% Festlegung der Art der Zitierung (Havardmethode: Abkuerzung Autor + Jahr) %
+% Bibliography (biblatex, numeric style)
 \addbibresource{literature/literature.bib}
-\appto{\bibsetup}{\sloppy}
+\appto{\bibsetup}{\sloppy}  % allow line breaks in long URLs
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% PDF-Optionen %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\definecolor{ifmOrange}{HTML}{ff6e00}
-\definecolor{DocBlue}{HTML}{0969da}     % Schlichtes, modernes Web-Blau (GitHub-Style)
-
+% PDF metadata and link colors
 \hypersetup{
-% --- Metadaten ---
     pdftitle=\Topic,
     pdfsubject=\SubTopic,
     pdfauthor=\Author,
     pdfcreator=LaTeX with hyperref,
-% --- PDF-Ansicht & Lesezeichen ---
     bookmarksopen=false,
     bookmarksnumbered=true,
-    bookmarksopenlevel=1,          % Öffnet bis Section-Ebene
-    pdfstartview=FitH,             % FitH (Fit Horizontal) ist lesefreundlicher als Fit
+    bookmarksopenlevel=1,
+    pdfstartview=FitH,
     pdfpagelayout=OneColumn,
-% --- Farbige Links aktivieren ---
-    colorlinks=true,               % Text einfärben statt Boxen
-    linkcolor=ifmOrange,             % Interne Links (Inhaltsverz., Abkürzungen, Abb.)
-    citecolor=ifmOrange,             % Zitate (\cite)
-    urlcolor=DocBlue,               % URLs und \href
-    linktoc=all                    % Im Inhaltsverzeichnis Seitenzahl und Text klickbar machen
+    colorlinks=true,
+    linkcolor=LinkColor,
+    citecolor=LinkColor,
+    urlcolor=UrlColor,
+    linktoc=all
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%%% Layout und Beschriftungen %%%%%%%%%%%%%%%%%%%%%%%%%
-\onehalfspacing                % Zeilenabstand: 1.5 (Standard: 1.2)
+% Layout and captions
+\onehalfspacing
+\setlist{noitemsep}
 
-% \/ Engere itemize und enumerates \/
-\setlist{noitemsep}            % Zeilenabstand für items auf 1 setzen
-
-\addto\captionsngerman{        % Tabellen- und Abbildungsunterschriften ändern
-    \renewcommand{\figurename}{Abb.}
+\addto\captionsenglish{
+    \renewcommand{\figurename}{Fig.}
     \renewcommand{\tablename}{Tab.}
 }
-\numberwithin{table}{chapter}                               % Tabellennummerierung je Sektion zurücksetzen
-\numberwithin{figure}{chapter}                              % Abbildungsnummerierung je Sektion zurücksetzen
-\renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}   % Tabellennummerierung mit Section
-\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}} % Abbildungsnummerierung mit Section
-\renewcommand{\thefootnote}{\arabic{footnote}}              % Sektionsbezeichnung von Fußnoten entfernen
+\numberwithin{table}{chapter}
+\numberwithin{figure}{chapter}
+\renewcommand{\thetable}{\arabic{chapter}.\arabic{table}}
+\renewcommand{\thefigure}{\arabic{chapter}.\arabic{figure}}
+\renewcommand{\thefootnote}{\arabic{footnote}}
+\renewcommand{\multfootsep}{, }
 
-\renewcommand{\multfootsep}{, }                             % Mehrere Fußnoten durch ", " trennen
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                         %%
-%%                 Listingstyle in dieser Datei bearbeiten                 %%
-%%                                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \input{02_Listingstyle.tex}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                         %%
-%% \/ \/ \/ \/   Dateien einbinden in den jeweiligen Datein:   \/ \/ \/ \/ %%
-%%                 03_Pages | 04_Kapitel | 05_Anhang                       %%
-%%                                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
     \pagenumbering{Roman}
     \input{03_pages.tex}
 
-    %%%%%%%%%%%%%%%%%%%%%%%% \/ \/ Kapitel einfügen \/ \/ %%%%%%%%%%%%%%%%%%%%%%%%
     \pagenumbering{arabic}
     \input{04_chapters.tex}
 
-    % Abschluss
-    \abk{cf.}{confer} % Vgl. wird beim indirektes Zitieren benötigt
-    \abk{ifm}{Ingenieurgemeinschaft für Messtechnik}
+    % Closing matter
+    \abbr{cf.}{confer}
     \include{pages/10_bibliography}
     \include{pages/11_Index}
 
-    %%%%%%%%%%%%%%%%%%%%%%%% \/ \/ Anhang einfügen \/ \/ %%%%%%%%%%%%%%%%%%%%%%%%
-    \renewcommand{\thetable}{\Alph{chapter}.\arabic{table}}              % Tabellennummerierung mit Section
-    \renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}            % Abbildungsnummerierung mit Section
-    \renewcommand{\thelstlisting}{\Alph{section}.\arabic{lstlisting}}    % Listingsnummerierung mit Section
+    % Appendix: numbering restarts, counters are prefixed with the appendix letter
+    \renewcommand{\thetable}{\Alph{chapter}.\arabic{table}}
+    \renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
+    \renewcommand{\thelstlisting}{\Alph{section}.\arabic{lstlisting}}
     \pagenumbering{Roman}\setcounter{page}{1}
     \appendix
     \input{05_appendix.tex}

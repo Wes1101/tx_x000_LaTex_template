@@ -1,19 +1,30 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                         %%
-%% \/   \/            Bitte hier Projektdaten eintragen            \/   \/ %%
-%%                                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Project data: fill in before writing. Used on the title page, declarations and PDF metadata.
+
+% Document
 \def\Topic{Topic}
 \def\SubTopic{SubTopic}
-\def\ReportType{Project report} % Projektbericht / Hausarbeit / Bachelorarbeit
-\def\Author{Max Mustermann}
-\def\Company{Musterfirma}
-\def\CompanyAddressStreet{Musterstraße 67}
-\def\CompanyAddressCity{88888, Musterstadt}
-\def\PraxYear{first}
+\def\ReportType{Project report}  % e.g. Project report / Term paper / Bachelor thesis
+\def\PraxYear{first}             % practice phase, e.g. first / second
 \def\EndDate{\today}
-\def\ProcessingTime{x Weeks}
+\def\ProcessingTime{x weeks}
+
+% Author
+\def\Author{Max Mustermann}
 \def\MatriculationNumber{00000000}
 \def\CourseOfStudies{TI00}
-\def\Supervisor{Max Supervisor}
-\def\examProf{Prof. Dr. Max Prof}
+
+% University
+\def\University{DHBW Ravensburg}
+\def\Campus{Campus Friedrichshafen}
+\def\Supervisor{Max Supervisor}       % company supervisor
+\def\examProf{Prof. Dr. Max Prof}     % expert from the DHBW
+
+% Company
+\def\Company{Musterfirma}
+\def\CompanyAddressStreet{Musterstra{\ss}e 67}
+\def\CompanyAddressCity{88888 Musterstadt}
+\def\CompanyLogo{pictures/company_logo}  % replace pictures/company_logo.pdf with your logo
+
+% Link colors in the PDF
+\definecolor{LinkColor}{HTML}{0b5394}  % internal links and citations
+\definecolor{UrlColor}{HTML}{0969da}   % URLs

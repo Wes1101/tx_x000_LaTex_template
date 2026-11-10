@@ -6,13 +6,13 @@
       <pdf-viewer>evince</pdf-viewer>
       <require-focus>true</require-focus>
       <viewer-command />
-      <compiler-arguments>-interaction=nonstopmode</compiler-arguments>
+      <compiler-arguments />
       <envs />
       <expand-macros-in-environment-variables>false</expand-macros-in-environment-variables>
       <before-run-command />
       <main-file>$PROJECT_DIR$/paper/main.tex</main-file>
-      <output-path>$PROJECT_DIR$/paper/out</output-path>
-      <auxil-path>{projectDir}/auxil</auxil-path>
+      <output-path>$PROJECT_DIR$/paper/build</output-path>
+      <auxil-path />
       <working-directory>{mainFileParent}</working-directory>
       <compile-twice>false</compile-twice>
       <output-format>PDF</output-format>

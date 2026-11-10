@@ -1,139 +1,109 @@
-# Tx_x000 LaTeX Template
+# DHBW LaTeX Paper Template
 
-This repository provides a structured LaTeX template for Tx_x000 papers at DHBW Ravensburg, Campus Friedrichshafen. It is designed as a practical starting point for thesis/project-paper writing and keeps document sources, supporting materials, and helper tooling clearly separated.
+A LaTeX template for papers at the DHBW (project reports, term papers, bachelor theses). It uses `scrreprt` (KOMA-Script), biblatex/biber, a glossary, a list of abbreviations and an index, and builds with a single `latexmk` command.
 
-## Repository overview
+**Credits:** originally created by Florian Christoph Veit (2021). Maintained and extended by David Willig.
 
-- [paper](paper): Main LaTeX source tree for the thesis/project paper.
-- [app](app): Optional area for project implementation or PoC artifacts.
-- [dhbw](dhbw): Official DHBW guideline and reference PDFs.
-- [helper_scripts](helper_scripts): Utility scripts for build and cleanup.
-- [.gitlab-ci.yml](.gitlab-ci.yml): CI pipeline for automatic PDF build.
-
-## Paper module
-
-The complete document setup lives in [paper](paper). The entry point is [paper/main.tex](paper/main.tex).
+## Repository layout
 
 ```text
-paper/
-  main.tex                  # Main document file
-  packages.tex              # Package imports
-  00_Project_Data.tex       # Project metadata (title, author, company, dates, ...)
-  01_New_Commands.tex       # Custom LaTeX commands
-  02_Listingstyle.tex       # Listing/code style configuration
-  03_pages.tex              # Includes files from pages/
-  04_chapters.tex           # Includes files from chapter/
-  05_appendix.tex           # Includes files from appendix/
-  pages/                    # Front matter and generated lists
-  chapter/                  # Main chapter content
-  appendix/                 # Appendix content
-  literature/
-    literature.bib          # Bibliography database
-  pictures/                 # Logos, images, and visual assets
+paper/                      # everything that ends up in the PDF
+  main.tex                  # entry point
+  .latexmkrc                # build configuration (output dir, biber, error summary)
+  packages.tex              # package imports
+  00_Project_Data.tex       # title, author, company, university, dates, logo path
+  01_New_Commands.tex       # custom commands and colors
+  02_Listingstyle.tex       # source code style
+  03_pages.tex              # front matter, includes pages/
+  04_chapters.tex           # chapters, includes chapter/
+  05_appendix.tex           # appendix, includes appendix/
+  pages/                    # title page, declarations, abstract, lists, bibliography, ...
+  chapter/                  # chapter files
+  appendix/                 # appendix files and images
+  literature/literature.bib # bibliography database
+  pictures/                 # images and logos (company_logo.pdf is a placeholder)
+dhbw/                       # official DHBW guidelines (PDF); check for newer versions
+.vscode/, .idea/            # shared editor settings (VS Code, IntelliJ)
+.gitlab-ci.yml              # CI: builds the PDF, packages releases on tags
 ```
 
-## Build workflow
+## Prerequisites
 
-Requirements:
+You need a TeX distribution that includes `pdflatex`, `latexmk`, `biber` and `makeindex`, plus Perl (used by `latexmk`).
 
-- A LaTeX distribution with `latexmk`
-- Running commands from the repository root
+| OS | Installation |
+|---|---|
+| macOS | `brew install --cask mactex-no-gui` (full, ~5 GB) or `brew install texlive` |
+| Linux (Debian/Ubuntu) | `sudo apt install texlive-full latexmk biber` (smaller: `texlive-latex-extra texlive-bibtex-extra biber latexmk`) |
+| Windows | [TeX Live](https://tug.org/texlive/windows.html) (includes Perl). With MiKTeX, additionally install [Strawberry Perl](https://strawberryperl.com/). |
 
-Preferred build command:
+Verify with `latexmk -v` and `biber --version`.
+
+## Building
+
+All options are in [`paper/.latexmkrc`](paper/.latexmkrc): output goes to `paper/build/`, biber and the index/glossary tools run automatically, and errors and warnings are printed again at the end of the run.
 
 ```bash
-./helper_scripts/latexmk_build_clean paper/main.tex
+cd paper
+latexmk main.tex            # build paper/build/main.pdf
+latexmk -quiet main.tex     # same, with less output (errors are still summarized at the end)
+latexmk -pvc main.tex       # rebuild on every change
+latexmk -C                  # delete build output
 ```
 
-What this does:
+### IntelliJ IDEA / PhpStorm (TeXiFy)
 
-- Compiles with `latexmk` (`-file-line-error -halt-on-error`)
-- Writes output to `paper/`
-- Cleans generated auxiliary files afterwards
+1. Install the **TeXiFy IDEA** plugin.
+2. Open the repository root. The shared run configuration **Build: main** appears in the run dropdown; it uses `latexmk` and writes to `paper/build`.
+3. Run it. TeXiFy shows errors and warnings in the build tool window.
 
-Build artifact:
+### VS Code
 
-```text
-paper/main.pdf
-```
-
-GitLab CI build step:
-
-```yaml
-latexmk -pdf paper/main.tex -outdir="paper"
-```
+1. Install the **LaTeX Workshop** extension (recommended automatically via `.vscode/extensions.json`).
+2. Open the repository root and `paper/main.tex`. The PDF is built on save and shown in a tab.
+3. Errors and warnings appear in the *Problems* panel.
 
 ## Writing workflow
 
-1. Maintain metadata in [paper/00_Project_Data.tex](paper/00_Project_Data.tex).
-2. Add or adjust reusable commands in [paper/01_New_Commands.tex](paper/01_New_Commands.tex).
-3. Manage front matter via [paper/pages](paper/pages) and the include file [paper/03_pages.tex](paper/03_pages.tex).
-4. Write chapter content in [paper/chapter](paper/chapter) and include it in [paper/04_chapters.tex](paper/04_chapters.tex).
-5. Add appendix content in [paper/appendix](paper/appendix) and include it in [paper/05_appendix.tex](paper/05_appendix.tex).
-6. Maintain references in [paper/literature/literature.bib](paper/literature/literature.bib).
-7. Rebuild the document after changes.
+1. Fill in [`00_Project_Data.tex`](paper/00_Project_Data.tex) and replace [`pictures/company_logo.pdf`](paper/pictures) with your logo.
+2. Edit the abstract and the AI usage note in [`pages/`](paper/pages). Remove pages you do not need in [`03_pages.tex`](paper/03_pages.tex).
+3. Write chapters in [`chapter/`](paper/chapter) and list them in [`04_chapters.tex`](paper/04_chapters.tex).
+4. Add appendix chapters in [`appendix/`](paper/appendix), starting with `\appsection{Title}{label}`, and list them in [`05_appendix.tex`](paper/05_appendix.tex).
+5. Add references to [`literature/literature.bib`](paper/literature/literature.bib) (export from Citavi/Zotero or write by hand) and cite with `\cite{key}`.
 
-## Detailed folder guidance
+### Custom commands
 
-### `paper/pages`
+| Command | Purpose |
+|---|---|
+| `\figsrc{size}{file}{caption}{bibkey}[page]` | Figure from `pictures/` with a source line. Size is a fraction of the text width. |
+| `\appfigure{size}{file}{caption}` | Figure from `appendix/`. |
+| `\appsection{title}{label}`, `\appref{label}` | Appendix chapter and a reference to it. |
+| `\abbr{abbreviation}{meaning}` | Entry in the list of abbreviations. |
+| `\gls{key}` | Glossary term; define entries with `\newglossaryentry` in `01_New_Commands.tex`. |
+| `\mypageref{label}` | "Figure 1.1 on page 5". |
+| `\myboxquote{text}` | Quote on a gray background. |
+| `\myparagraph{title}`, `\mysubparagraph{title}` | Paragraph headings with a line break. |
+| `\includepdf[pages=..]{file}` | Include PDF pages (package `pdfpages`). |
 
-This folder stores additional pages (front matter and generated directories). Files are included via [paper/03_pages.tex](paper/03_pages.tex). If a page is not needed, remove or comment out its include there.
+## Using the template for a new paper
 
-Typical pages:
+Do not fork or keep the template's history. Start a fresh repository instead:
 
-- Title page
-- Declaration of originality
-- Abstract
-- Table of contents
-- List of abbreviations
-- Glossary
-- List of figures
-- List of tables
-- List of listings
-- Bibliography
-- Index
-- Blocking note / Sperrvermerk
+- **GitHub:** open the template repository and click **Use this template → Create a new repository** (enable *Settings → Template repository* once). The new repository starts with a single clean commit.
+- **Release zip:** download the latest release (`git archive` output, no history) and `git init` in the extracted folder. For GitLab, pushing a tag such as `v1.0.0` makes the CI create this zip as a job artifact.
+- **Manual clone:**
+  ```bash
+  git clone --depth 1 <template-url> my-paper
+  cd my-paper
+  rm -rf .git && git init && git add -A && git commit -m "Initial commit"
+  git remote add origin <your-repo-url>
+  ```
 
-### `paper/chapter`
+## Variants
 
-This folder contains the main chapter files. Existing files are a possible starter structure and can be adapted or removed. Keep [paper/04_chapters.tex](paper/04_chapters.tex) aligned with the actually used chapter files (remove/comment unused includes).
+- `main`: generic template (this branch).
+- `ifm`: the same template preconfigured for ifm (logo, link color, company abbreviation). Merge `main` into it to receive template updates.
 
-### `paper/appendix`
+## CI
 
-Store appendix documents/images here that are included with:
-
-```latex
-\anhang{#1 Groesse}{#2 Dateiname}{#3 Bildunterschrift}
-```
-
-### `paper/literature`
-
-Store bibliography entries in [paper/literature/literature.bib](paper/literature/literature.bib). External tools (for example Citavi) can be used; export BibTeX and save it as `literature.bib` in this folder.
-
-Useful note: BibTeX generator websites can help with creating entries. Ensure the desired citation style is set before copying entries.
-
-### `paper/pictures`
-
-- Contains placeholder logos (e.g. DHBW / company) that should be replaced with project-specific assets.
-- Contains images/documents to be included with:
-
-```latex
-\bild{#1 Groesse}{#2 Dateiname}{#3 Bildunterschrift}
-```
-
-Supported formats include e.g. `pdf`, `jpg`, `png`. For embedding single pages from PDFs, use `\includepdf[options]{pdf-file}`.
-
-### `app`
-
-Optional directory for implementation artifacts (PoC/software part of the project).
-
-### `dhbw`
-
-Contains official DHBW documents and reference PDFs. Official source:
-https://www.ravensburg.dhbw.de/service-einrichtungen/dokumente-downloads#Dokumente_Technik
-
-## Notes
-
-- Keep include files (`03_pages.tex`, `04_chapters.tex`, `05_appendix.tex`) synchronized with existing content files.
-- Use relative paths for image assets in the paper module.
-- `paper/main.pdf` is generated and can be recreated at any time.
+[`.gitlab-ci.yml`](.gitlab-ci.yml) builds `paper/build/main.pdf` with `latexmk` and keeps the PDF and the log as artifacts (also on failure). Pin the TeX Live image tag for reproducible builds.

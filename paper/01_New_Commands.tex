@@ -1,154 +1,104 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%                                                                         %%
-%% \/   \/              Eigene Kommandos definieren                \/   \/ %%
-%%                                                                         %%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Custom commands and colors.
 
-%%%%%%%%%%%%%%%%%%%%%%%% Zitierern für Anhänge %%%%%%%%%%%%%%%%%%%%%%%%
+%% --- Colors ------------------------------------------------------------------
+\definecolor{boxgray}{gray}{0.9}      % background of quote boxes and listings
+\definecolor{commentgray}{gray}{0.5}  % comments in listings
+\definecolor{darkgreen}{rgb}{0,.5,0}  % strings in listings
+
+%% --- Figures -----------------------------------------------------------------
+% \figsrc{<size>}{<file in pictures/>}{<caption>}{<bib key>}[<page>]
+% Figure with a source line. <size> is a fraction of the text width (e.g. 0.8).
+% The label is fig:<file>.
+\NewDocumentCommand{\figsrc}{m m m m o}{%
+    \begin{figure}[H]
+        \centering
+        \includegraphics[width=#1\textwidth, height=#1\textheight, keepaspectratio]{pictures/#2}
+        \caption{#3}\label{fig:#2}
+        \caption*{\textbf{Source:}%
+            \IfNoValueTF{#5}{\cite{#4}}{\cite[p.~#5]{#4}}%
+        }
+    \end{figure}
+}
+
+% \appfigure{<size>}{<file in appendix/>}{<caption>}
+% Figure in the appendix. The label is app:<file>.
+\newcommand{\appfigure}[3]{%
+    \begin{figure}[H]
+        \centering
+        \caption{#3}\label{app:#2}
+        \includegraphics[width=#1\textwidth, height=#1\textheight, keepaspectratio]{appendix/#2}
+    \end{figure}
+}
+
+%% --- Appendix chapters and references ----------------------------------------
+\makeatletter
 \zref@newprop*{appsec}{}
 \zref@addprop{main}{appsec}
 
-% Definition von \applabel{#1: label}{#2: text}
-% von \appsec{#1: text}{#2: label} zur Erzeugung des Labels verwendet
+% \applabel{<label>}{<text>}: used by \appsection to create the label
 \def\applabel#1#2{%
     \zref@setcurrent{appsec}{#2}%
     \zref@wrapper@immediate{\zref@label{#1}}%
 }
-
-% Definition von \appref{#1: label}
-% anstelle \ref{#1: label} zum referenzieren von Anhängen verwenden
-\def\appref#1{%
-    \hyperref[#1]{\zref@extract{#1}{appsec}}%
-}
 \makeatother
 
-%%%%%%%%%%%%%%%%%%%%%%%% Kaptitel für Anhänge %%%%%%%%%%%%%%%%%%%%%%%%
-% Definition von \appsection{#1: text}{#2: label}
-% Ersetzt \chapter{#1: text} und \label{#2: label} für Anhänge
-\newcommand{\theappsection}[1]{Anhang \Alph{section}:~\protect #1}
-\newcommand{\appsection}[2]{
+% \appref{<label>}: reference to an appendix chapter (use instead of \ref)
+\def\appref#1{\hyperref[#1]{\zref@extract{#1}{appsec}}}
+
+% \appsection{<title>}{<label>}: appendix chapter "Appendix A: <title>" (use instead of \chapter)
+\newcommand{\theappsection}[1]{Appendix \Alph{section}:~\protect #1}
+\newcommand{\appsection}[2]{%
     \addtocounter{section}{1}
     \phantomsection
     \addcontentsline{toc}{section}{\theappsection{#1}}
     \markboth{\theappsection{#1}}{}
-
     \chapter*{\theappsection{#1}}
-    \applabel{#2}{Anhang \Alph{section}}
+    \applabel{#2}{Appendix \Alph{section}}
     \label{#2}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%% In itemize oder enumerate item mit vertikaler linie %%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\LinedItem}[1]{\item \begin{tabular}[t]{@{}|p{.9847\linewidth}@{}}#1\end{tabular}}
-\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
+%% --- References ----------------------------------------------------------------
+% \mypageref{<label>}: "Figure 1.1 on page 5"
+\newcommand{\mypageref}[1]{\autoref{#1} on page \pageref{#1}}
 
-%%%%%%%%%%%%%%%%%%%%%%%% Unterschtrichene Line am Text %%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\myuline}[1]{%
-    \uline{\phantom{#1}}%
-    \llap{\contour{white}{#1}}%
-}
+% \autorefgray{<label>}: small gray reference
+\newcommand{\autorefgray}[1]{{\footnotesize \color{gray} \textit{\autoref{#1}}}}
 
-%%%%%%%%%%%%%%%%%%%%%%%% Eigene Farbwerte definieren %%%%%%%%%%%%%%%%%%%%%%%%
-\definecolor{boxgray}{gray}{0.9}         % Hintergrundfarbe für Zitatboxen
-\definecolor{commentgray}{gray}{0.5}     % Grau für Kommentare in Quelltexten
-\definecolor{darkgreen}{rgb}{0,.5,0}     % Grün für Strings in Quelltexten
+%% --- Text helpers ----------------------------------------------------------------
+% \abbr{<abbreviation>}{<meaning>}: entry in the list of abbreviations
+\newcommand{\abbr}[2]{\nomenclature[]{#1}{#2}}
 
-%%%%%%%%%%%%%%%%%%%%%%%% Deutsche Anführungszeichen %%%%%%%%%%%%%%%%%%%%%%%%
-% Definition von \gqq{#1: text}: Text in Anführungszeichen
-\newcommand{\gqq}[1]{\glqq #1\grqq}
-
-% Definition von \footref{#1: label}
-% Verweis auf bereits existierende Fußnoten mittels
-\providecommand*{\footref}[1]{
-    \begingroup
-        \unrestored@protected@xdef\@thefnmark{\ref{#1}}
-    \endgroup
-\@footnotemark}
-
-%%%%%%%%%%%%%%%%%%%%%%%% Referenzieren mit Seite %%%%%%%%%%%%%%%%%%%%%%%%
-% Definition von \mypageref{#1: label}
-% Kombination aus \autoref{#1: label} und \pageref{#1: label}
-\newcommand{\mypageref}[1]{\autoref{#1} auf Seite \pageref{#1}}
-
-%%%%%%%%%%%%%%%%%%%%%%%% Grauebox für Zitate %%%%%%%%%%%%%%%%%%%%%%%%
-% Definition von \myboxquote{#1: text}
-% grau hinterlegte Quotation-Umgebung (für Zitate)
-\newcommand{\myboxquote}[1]{
+% \myboxquote{<text>}: quotation on a gray background
+\newcommand{\myboxquote}[1]{%
     \begin{quotation}
         \colorbox{boxgray}{\parbox{0.78\textwidth}{#1}}
     \end{quotation}
     \vspace*{1mm}
 }
 
-%%%%%%%%%%%%%%%%%%%%%%%% Für Bilder (#2 ist das Label) %%%%%%%%%%%%%%%%%%%%%%%%
-% Definition \bild{#1 Groesse}{#2 Dateiname}{#3 Bildunterschrift}{#4 Source}
-\NewDocumentCommand{\bild}{m m m m o}{%
-    \begin{figure}[H]
-        \centering
-        \includegraphics[width=#1\textwidth, height=#1\textheight, keepaspectratio]{pictures/#2}
-        \caption{#3} \label{fig:#2}
-        \caption*{\textbf{Source:}%
-            \IfNoValueTF{#5}{%
-                \cite{#4}%
-            }{%
-                \cite[p.~#5]{#4}%
-            }%
-        }
-    \end{figure}
-}
+% \myparagraph / \mysubparagraph: paragraph headings followed by a line break
+\newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
+\newcommand{\mysubparagraph}[1]{\subparagraph{#1}\mbox{}\\}
 
-%%%%%%%%%%%%%%%%%%%%%%%% Für Bilder mit Zitat (#2 ist das Label) %%%%%%%%%%%%%%%%%%%%%%%%
-% Definition \bildzitat{#1 Groesse}{#2 Dateiname}{#3 Bildunterschrift}{#4 Seite Zitat}{#5 Zitatkey}
-\newcommand{\bildzitat}[5]{
-    \begin{figure}[H]
-        \centering
-        \caption[#3]{#3\protect\footnotemark} \label{fig:#2}
-        \includegraphics[width=#1\textwidth, height=#1\textheight, keepaspectratio]{pictures/#2}
-    \end{figure}
-    \footnotetext{\citet{#5}{#4}}
-}
+% \myuline{<text>}: underlined text that skips descenders
+\newcommand{\myuline}[1]{\uline{\phantom{#1}}\llap{\contour{white}{#1}}}
 
-%%%%%%%%%%%%%%%%%%%%%%%% Für Anhang (#2 ist das Label) %%%%%%%%%%%%%%%%%%%%%%%%
-% Definition \anhang{#1 Groesse}{#2 Dateiname}{#3 Bildunterschrift}
-\newcommand{\anhang}[3]{
-    \begin{figure}[H]
-        \centering
-        \caption{#3} \label{ang:#2}
-        \includegraphics[width=#1\textwidth, height=#1\textheight, keepaspectratio]{Anhang/#2}
-    \end{figure}
-}
+% \forexample: "e.g. "
+\newcommand{\forexample}{e.g. }
 
-%%%%%%%%%%%%%%%%%%%%%%%% Abkürzungen %%%%%%%%%%%%%%%%%%%%%%%%
-% Befehl von \abk{#1 Abkürzung}{#2 Erklärung}
-\newcommand{\abk}[2]{\nomenclature[]{#1}{#2}}
+% \LinedItem{<text>}: list item with a vertical line
+\newcommand{\LinedItem}[1]{\item \begin{tabular}[t]{@{}|p{.9847\linewidth}@{}}#1\end{tabular}}
 
-%%%%%%%%%%%%%%%%%%%%%%%% Zitieren %%%%%%%%%%%%%%%%%%%%%%%%
-% Neues Kommando Zitieren \zitat{1 Seite}{2 ID der Quelle}
-%\newcommand{\zitat}[2]{\footnote{Vgl. \citet{#2}{#1}}}
-%\newcommand{\direktzitat}[2]{\footnote{\citet{#2}{#1}}}
-
-%%%%%%%%%%%%%%%%%%%%%%%% Dezenteres Referenzieren %%%%%%%%%%%%%%%%%%%%%%%%
-% Referenziert in Grau und klein \autorefgray{#1 lable}
-\newcommand{\autorefgray}[1]{{\footnotesize \color{gray} \textit{\autoref{#1}}}}
-
-%%%%%%%%%%%%%%%%%%%%%%%% Neue Tabellenspalten %%%%%%%%%%%%%%%%%%%%%%%%
+%% --- Table columns ------------------------------------------------------------------
+% Fixed-width columns: C = centered, L = left, R = right, P = centered (p-type)
+\newcolumntype{P}[1]{>{\centering\arraybackslash}p{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
-%%%%%%%%%%%%%%%%%%%%%%%% New z.B. %%%%%%%%%%%%%%%%%%%%%%%%
-\newcommand{\forexample}{e.g. }
-
-%%%%%%%%%%%%%%%%%%%%%%%% paragraph with newline %%%%%%%%%%%%%%%%%%%%%%%%
-% paragraph mit neuer Zeile \myparagraph{#1 Headline}
-\newcommand{\myparagraph}[1]{\paragraph{#1}\mbox{}\\}
-
-%%%%%%%%%%%%%%%%%%%%%%%% subparagraph with newline %%%%%%%%%%%%%%%%%%%%%%%%
-% subparagraph mit neuer Zeile \mysubparagraph{#1 Headline}
-\newcommand{\mysubparagraph}[1]{\subparagraph{#1}\mbox{}\\}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%% Glossar %%%%%%%%%%%%%%%%%%%%%%%%
-\newglossaryentry{test}{
-    name={Test},
-    description={Das ist ein Testeintrag}
+%% --- Glossary ----------------------------------------------------------------------
+% Example entry; use with \gls{example}. Replace with your own entries.
+\newglossaryentry{example}{
+    name={Example},
+    description={An example glossary entry}
 }
