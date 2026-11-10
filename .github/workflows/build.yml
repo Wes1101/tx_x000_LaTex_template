@@ -1,0 +1,49 @@
+# GitHub counterpart of .gitlab-ci.yml: builds the paper and, on tags, publishes a release.
+name: Build paper
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*", "ifm-v*"]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build with latexmk
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          working_directory: paper
+          latexmk_shell_escape: false
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: paper
+          path: |
+            paper/build/main.pdf
+            paper/build/main.log
+
+  release:
+    # Runs on tags only: attaches a history-free zip of the template and the built PDF.
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: paper
+          path: artifact
+      - name: Package template
+        run: git archive --format=zip --prefix="${GITHUB_REPOSITORY#*/}-${GITHUB_REF_NAME}/" -o "${GITHUB_REPOSITORY#*/}-${GITHUB_REF_NAME}.zip" "${GITHUB_REF_NAME}"
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            *.zip
+            artifact/main.pdf
+          generate_release_notes: true

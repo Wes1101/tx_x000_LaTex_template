@@ -105,4 +105,9 @@ Do not fork or keep the template's history. Start a fresh repository instead:
 
 ## CI
 
-[`.gitlab-ci.yml`](.gitlab-ci.yml) builds `paper/build/main.pdf` with `latexmk` and keeps the PDF and the log as artifacts (also on failure). Pin the TeX Live image tag for reproducible builds.
+The template is hosted on GitHub and mirrored to GitLab (to publish the PDF there), so both pipelines exist and do the same:
+
+- [`.github/workflows/build.yml`](.github/workflows/build.yml) (GitHub Actions)
+- [`.gitlab-ci.yml`](.gitlab-ci.yml) (GitLab CI)
+
+Each builds `paper/build/main.pdf` with `latexmk` and keeps the PDF and the log as artifacts (also on failure). Pushing a tag such as `v2.0.0` additionally creates a release zip without git history (GitHub: attached to the release together with the PDF; GitLab: job artifact). Delete the file of the platform you do not use. Pin the TeX Live image tag in the GitLab file for reproducible builds.
