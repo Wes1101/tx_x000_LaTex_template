@@ -22,7 +22,6 @@ paper/                      # everything that ends up in the PDF
   appendix/                 # appendix files and images
   literature/literature.bib # bibliography database
   pictures/                 # images and logos (company_logo.pdf is a placeholder)
-dhbw/                       # official DHBW guidelines (PDF); check for newer versions
 .vscode/, .idea/            # shared editor settings (VS Code, IntelliJ)
 .gitlab-ci.yml              # CI: builds the PDF, packages releases on tags
 ```
