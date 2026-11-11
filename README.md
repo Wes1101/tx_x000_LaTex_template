@@ -21,7 +21,7 @@ paper/                      # everything that ends up in the PDF
   chapter/                  # chapter files
   appendix/                 # appendix files and images
   literature/literature.bib # bibliography database
-  pictures/                 # images and logos (company_logo.pdf is a placeholder)
+  pictures/                 # images and logos (company and university logos are placeholders)
 .vscode/, .idea/            # shared editor settings (VS Code, IntelliJ)
 .gitlab-ci.yml              # CI: builds the PDF, packages releases on tags
 ```
@@ -64,7 +64,7 @@ latexmk -C                  # delete build output
 
 ## Writing workflow
 
-1. Fill in [`00_Project_Data.tex`](paper/00_Project_Data.tex) and replace [`pictures/company_logo.pdf`](paper/pictures) with your logo.
+1. Fill in [`00_Project_Data.tex`](paper/00_Project_Data.tex) and replace the placeholders [`pictures/company_logo.pdf`](paper/pictures) and `pictures/university_logo.pdf` with your logos (delete the `\UniversityLogo` line for no university logo).
 2. Edit the abstract and the AI usage note in [`pages/`](paper/pages). Remove pages you do not need in [`03_pages.tex`](paper/03_pages.tex).
 3. Write chapters in [`chapter/`](paper/chapter) and list them in [`04_chapters.tex`](paper/04_chapters.tex).
 4. Add appendix chapters in [`appendix/`](paper/appendix), each starting with `\chapter{Title}\label{app:name}`, and list them in [`05_appendix.tex`](paper/05_appendix.tex). They are numbered A, B, ...; refer to them with `\autoref{app:name}`.

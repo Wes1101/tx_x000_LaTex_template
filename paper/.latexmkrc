@@ -6,14 +6,18 @@ $out_dir  = 'build';           # all generated files go here (git-ignored)
 $bibtex_use = 2;               # run biber and delete its files on `latexmk -C`
 
 # \include{dir/file} writes dir/file.aux, so every source sub-directory must also exist
-# inside the output directory. IDEs may pass their own output directory (e.g. IntelliJ: out/),
-# so the directories are created right before every pdflatex run, in the directory in effect.
+# inside the output (and aux) directory. IDEs may pass their own directories (IntelliJ passes
+# -outdir=paper/build and -auxdir=out), so they are created right before every pdflatex run.
 $pdflatex = 'internal pdflatex_with_dirs %O %S';
 use File::Path qw(make_path);
 sub pdflatex_with_dirs {
-    foreach my $dir (glob('*/')) {
-        $dir =~ s{/$}{};
-        make_path("$out_dir/$dir") unless $out_dir eq $dir;
+    # Aux files go to $aux_dir, which is the same as $out_dir unless an IDE sets -auxdir.
+    foreach my $base ($out_dir, $aux_dir) {
+        next unless defined $base && $base ne '';
+        foreach my $dir (glob('*/')) {
+            $dir =~ s{/$}{};
+            make_path("$base/$dir") unless $base eq $dir;
+        }
     }
     return system('pdflatex', '-interaction=nonstopmode', '-file-line-error', '-synctex=1', @_);
 }
