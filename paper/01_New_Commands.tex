@@ -21,40 +21,13 @@
 }
 
 % \appfigure{<size>}{<file in appendix/>}{<caption>}
-% Figure in the appendix. The label is app:<file>.
+% Figure from appendix/. The label is app:<file>.
 \newcommand{\appfigure}[3]{%
     \begin{figure}[H]
         \centering
         \caption{#3}\label{app:#2}
         \includegraphics[width=#1\textwidth, height=#1\textheight, keepaspectratio]{appendix/#2}
     \end{figure}
-}
-
-%% --- Appendix chapters and references ----------------------------------------
-\makeatletter
-\zref@newprop*{appsec}{}
-\zref@addprop{main}{appsec}
-
-% \applabel{<label>}{<text>}: used by \appsection to create the label
-\def\applabel#1#2{%
-    \zref@setcurrent{appsec}{#2}%
-    \zref@wrapper@immediate{\zref@label{#1}}%
-}
-\makeatother
-
-% \appref{<label>}: reference to an appendix chapter (use instead of \ref)
-\def\appref#1{\hyperref[#1]{\zref@extract{#1}{appsec}}}
-
-% \appsection{<title>}{<label>}: appendix chapter "Appendix A: <title>" (use instead of \chapter)
-\newcommand{\theappsection}[1]{Appendix \Alph{section}:~\protect #1}
-\newcommand{\appsection}[2]{%
-    \addtocounter{section}{1}
-    \phantomsection
-    \addcontentsline{toc}{section}{\theappsection{#1}}
-    \markboth{\theappsection{#1}}{}
-    \chapter*{\theappsection{#1}}
-    \applabel{#2}{Appendix \Alph{section}}
-    \label{#2}
 }
 
 %% --- References ----------------------------------------------------------------

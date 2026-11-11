@@ -53,13 +53,13 @@ latexmk -C                  # delete build output
 ### IntelliJ IDEA / PhpStorm (TeXiFy)
 
 1. Install the **TeXiFy IDEA** plugin.
-2. Open the repository root. The shared run configuration **Build: main** appears in the run dropdown; it uses `latexmk` and writes to `paper/build`.
+2. Open the repository root. The shared run configuration **Build: main** appears in the run dropdown; it uses `latexmk` and writes to `paper/build`. Any other output directory chosen by the IDE (for example `out/`) works too.
 3. Run it. TeXiFy shows errors and warnings in the build tool window.
 
 ### VS Code
 
 1. Install the **LaTeX Workshop** extension (recommended automatically via `.vscode/extensions.json`).
-2. Open the repository root and `paper/main.tex`. The PDF is built on save and shown in a tab.
+2. Open the repository root and `paper/main.tex`. Nothing is built automatically: click the green **Build LaTeX project** button in the sidebar (*TeX* tab) or press `Cmd/Ctrl+Alt+B`. The PDF opens in a tab.
 3. Errors and warnings appear in the *Problems* panel.
 
 ## Writing workflow
@@ -67,7 +67,7 @@ latexmk -C                  # delete build output
 1. Fill in [`00_Project_Data.tex`](paper/00_Project_Data.tex) and replace [`pictures/company_logo.pdf`](paper/pictures) with your logo.
 2. Edit the abstract and the AI usage note in [`pages/`](paper/pages). Remove pages you do not need in [`03_pages.tex`](paper/03_pages.tex).
 3. Write chapters in [`chapter/`](paper/chapter) and list them in [`04_chapters.tex`](paper/04_chapters.tex).
-4. Add appendix chapters in [`appendix/`](paper/appendix), starting with `\appsection{Title}{label}`, and list them in [`05_appendix.tex`](paper/05_appendix.tex).
+4. Add appendix chapters in [`appendix/`](paper/appendix), each starting with `\chapter{Title}\label{app:name}`, and list them in [`05_appendix.tex`](paper/05_appendix.tex). They are numbered A, B, ...; refer to them with `\autoref{app:name}`.
 5. Add references to [`literature/literature.bib`](paper/literature/literature.bib) (export from Citavi/Zotero or write by hand) and cite with `\cite{key}`.
 
 ### Custom commands
@@ -76,12 +76,15 @@ latexmk -C                  # delete build output
 |---|---|
 | `\figsrc{size}{file}{caption}{bibkey}[page]` | Figure from `pictures/` with a source line. Size is a fraction of the text width. |
 | `\appfigure{size}{file}{caption}` | Figure from `appendix/`. |
-| `\appsection{title}{label}`, `\appref{label}` | Appendix chapter and a reference to it. |
 | `\abbr{abbreviation}{meaning}` | Entry in the list of abbreviations. |
 | `\gls{key}` | Glossary term; define entries with `\newglossaryentry` in `01_New_Commands.tex`. |
 | `\mypageref{label}` | "Figure 1.1 on page 5". |
+| `\autorefgray{label}` | Small gray reference. |
 | `\myboxquote{text}` | Quote on a gray background. |
 | `\myparagraph{title}`, `\mysubparagraph{title}` | Paragraph headings with a line break. |
+| `\myuline{text}` | Underlined text that skips descenders. |
+| `\forexample` | "e.g. ". |
+| `\LinedItem{text}` | List item with a vertical line. |
 | `\includepdf[pages=..]{file}` | Include PDF pages (package `pdfpages`). |
 
 ## Using the template for a new paper

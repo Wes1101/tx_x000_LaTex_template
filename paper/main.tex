@@ -91,12 +91,13 @@
     \include{pages/10_bibliography}
     \include{pages/11_Index}
 
-    % Appendix: numbering restarts, counters are prefixed with the appendix letter
-    \renewcommand{\thetable}{\Alph{chapter}.\arabic{table}}
-    \renewcommand{\thefigure}{\Alph{section}.\arabic{figure}}
-    \renewcommand{\thelstlisting}{\Alph{section}.\arabic{lstlisting}}
-    \pagenumbering{Roman}\setcounter{page}{1}
+    % Appendix: chapters are lettered ("Appendix A: Title"), page numbers continue.
+    % Tables, figures and listings are numbered A.1, A.2, ...
     \appendix
+    \renewcommand*{\chapterformat}{\appendixname~\thechapter:\enskip}
+    \renewcommand{\thetable}{\Alph{chapter}.\arabic{table}}
+    \renewcommand{\thefigure}{\Alph{chapter}.\arabic{figure}}
+    \renewcommand{\thelstlisting}{\Alph{chapter}.\arabic{lstlisting}}
     \input{05_appendix.tex}
     \include{pages/12_AI_usage_note}
 \end{document}

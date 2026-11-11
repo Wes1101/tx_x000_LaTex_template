@@ -1,5 +1,7 @@
 # LaTeX build output
 paper/build/
+# default output directory of IntelliJ (TeXiFy)
+out/
 
 # IDE files: keep only shared run configurations
 .idea/*

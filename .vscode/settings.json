@@ -20,7 +20,7 @@
   "latex-workshop.latex.recipe.default": "latexmk",
   // Output directory, relative to the directory of main.tex (matches $out_dir in .latexmkrc).
   "latex-workshop.latex.outDir": "%DIR%/build",
-  "latex-workshop.latex.autoBuild.run": "onSave",
+  "latex-workshop.latex.autoBuild.run": "never",
   "latex-workshop.latex.autoClean.run": "never",
   "latex-workshop.latex.rootFile.doNotPrompt": true,
   "latex-workshop.view.pdf.viewer": "tab",
