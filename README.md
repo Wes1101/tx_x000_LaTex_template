@@ -23,7 +23,9 @@ paper/                      # everything that ends up in the PDF
   literature/literature.bib # bibliography database
   pictures/                 # images and logos (company and university logos are placeholders)
 .vscode/, .idea/            # shared editor settings (VS Code, IntelliJ)
+.github/workflows/         # CI (GitHub Actions)
 .gitlab-ci.yml              # CI: builds the PDF, packages releases on tags
+CLAUDE.md                   # instructions for AI coding assistants working on the paper
 ```
 
 ## Prerequisites
