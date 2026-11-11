@@ -74,8 +74,8 @@ latexmk -C                  # delete build output
 
 | Command | Purpose |
 |---|---|
-| `\figsrc{size}{file}{caption}{bibkey}[page]` | Figure from `pictures/` with a source line. Size is a fraction of the text width. |
-| `\appfigure{size}{file}{caption}` | Figure from `appendix/`. |
+| `\figsrc{size}{file}{caption}{bibkey}[page]` | Figure from `pictures/` (file name without extension) with a source line. Size is a fraction of the text width. Label: `fig:file`, so use each file once. |
+| `\appfigure{size}{file}{caption}` | Figure from `appendix/`. Label: `app:file`. |
 | `\abbr{abbreviation}{meaning}` | Entry in the list of abbreviations. |
 | `\gls{key}` | Glossary term; define entries with `\newglossaryentry` in `01_New_Commands.tex`. |
 | `\mypageref{label}` | "Figure 1.1 on page 5". |
@@ -85,7 +85,15 @@ latexmk -C                  # delete build output
 | `\myuline{text}` | Underlined text that skips descenders. |
 | `\forexample` | "e.g. ". |
 | `\LinedItem{text}` | List item with a vertical line. |
-| `\includepdf[pages=..]{file}` | Include PDF pages (package `pdfpages`). |
+| `\includepdf[pages=..]{file}` | Include PDF pages (package `pdfpages`); path relative to `paper/`. |
+
+Also defined in [`01_New_Commands.tex`](paper/01_New_Commands.tex):
+
+- **Table columns:** `C{width}` (centered), `L{width}` (left), `R{width}` (right) and `P{width}` (centered paragraph), e.g. `\begin{tabular}{L{3cm}R{2cm}}`.
+- **Colors:** `boxgray`, `commentgray`, `darkgreen` (used by quotes and listings).
+- **Appendix chapters** need no special command: use `\chapter{Title}\label{app:name}` and `\autoref{app:name}` ("Appendix A").
+
+Commands that are not used anywhere in the empty template (`\appfigure`, `\mypageref`, `\autorefgray`, `\myboxquote`, `\myparagraph`, `\mysubparagraph`, `\forexample`, `\LinedItem`) are optional helpers; all were test-built.
 
 ## Using the template for a new paper
 

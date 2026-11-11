@@ -8,13 +8,13 @@
 %% --- Figures -----------------------------------------------------------------
 % \figsrc{<size>}{<file in pictures/>}{<caption>}{<bib key>}[<page>]
 % Figure with a source line. <size> is a fraction of the text width (e.g. 0.8).
-% The label is fig:<file>.
+% The label is fig:<file>, so use each file once (or label the second figure yourself).
 \NewDocumentCommand{\figsrc}{m m m m o}{%
     \begin{figure}[H]
         \centering
         \includegraphics[width=#1\textwidth, height=#1\textheight, keepaspectratio]{pictures/#2}
         \caption{#3}\label{fig:#2}
-        \caption*{\textbf{Source:}%
+        \caption*{\textbf{Source:}~%
             \IfNoValueTF{#5}{\cite{#4}}{\cite[p.~#5]{#4}}%
         }
     \end{figure}
